@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Authors>Tom Bowers</Authors>
+    <Company>Invisual</Company>
+    <Product>InvisualRest</Product>
+    <Description>Make rest requests with strongly typed requests and responses. Includes preset and configurable retry policies.</Description>
+    <Copyright>Copyright (c) 2017 Tom Bowers</Copyright>
+    <PackageLicenseUrl>https://github.com/tombowers/InvisualRest/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/tombowers/InvisualRest</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tombowers/InvisualRest</RepositoryUrl>
+    <PackageTags>Invisual Rest</PackageTags>
+    <Version>1.0.3</Version>
+    <AssemblyName>Invisual.Libraries.Rest.Json</AssemblyName>
+    <RootNamespace>InvisualRest</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>
