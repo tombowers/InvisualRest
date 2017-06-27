@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace InvisualRest
 {
-  public class ListResponse<T> : RestResponse, IList<T>
+  public class ListResponse<T> : IList<T>
   {
     public List<T> Items { get; set; } = new List<T>();
 

@@ -31,37 +31,37 @@ namespace InvisualRest
 
     protected Dictionary<string, string> RequestHeaders { get; }
 
-    public async Task<T> GetAsync<T>(string resource) where T : RestResponse
+    public async Task<T> GetAsync<T>(string resource)
     {
       return await RequestAsync<T>(resource, HttpMethod.Get).ConfigureAwait(false);
     }
 
-    public async Task<T> PostAsync<T>(string resource, RestRequest<T> request) where T : RestResponse
+    public async Task<T> PostAsync<T>(string resource, RestRequest<T> request)
     {
       return await RequestAsync(resource, HttpMethod.Post, request).ConfigureAwait(false);
     }
 
-    public async Task<T> PatchAsync<T>(string resource, RestRequest<T> request) where T : RestResponse
+    public async Task<T> PatchAsync<T>(string resource, RestRequest<T> request)
     {
       return await RequestAsync(resource, new HttpMethod("PATCH"), request).ConfigureAwait(false);
     }
 
-    public async Task<T> PutAsync<T>(string resource, RestRequest<T> request) where T : RestResponse
+    public async Task<T> PutAsync<T>(string resource, RestRequest<T> request)
     {
       return await RequestAsync(resource, HttpMethod.Put, request).ConfigureAwait(false);
     }
 
-    public async Task<T> DeleteAsync<T>(string resource) where T : RestResponse
+    public async Task<T> DeleteAsync<T>(string resource)
     {
       return await RequestAsync<T>(resource, HttpMethod.Delete).ConfigureAwait(false);
     }
 
-    protected virtual async Task<T> RequestAsync<T>(string resource, HttpMethod httpMethod, RestRequest<T> request = null) where T : RestResponse
+    protected virtual async Task<T> RequestAsync<T>(string resource, HttpMethod httpMethod, RestRequest<T> request = null)
     {
       return await RequestAfterDelayAsync(0, resource, httpMethod, request).ConfigureAwait(false);
     }
 
-    private async Task<T> RequestAfterDelayAsync<T>(int requestIndex, string resource, HttpMethod httpMethod, RestRequest<T> request = null) where T : RestResponse
+    private async Task<T> RequestAfterDelayAsync<T>(int requestIndex, string resource, HttpMethod httpMethod, RestRequest<T> request = null)
     {
       await Task.Delay(CalculateNextRetryDelay(requestIndex)).ConfigureAwait(false);
 

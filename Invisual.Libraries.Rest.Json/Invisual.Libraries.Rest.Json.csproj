@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/tombowers/InvisualRest</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tombowers/InvisualRest</RepositoryUrl>
     <PackageTags>Invisual Rest</PackageTags>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <AssemblyName>Invisual.Libraries.Rest.Json</AssemblyName>
     <RootNamespace>InvisualRest</RootNamespace>
   </PropertyGroup>
