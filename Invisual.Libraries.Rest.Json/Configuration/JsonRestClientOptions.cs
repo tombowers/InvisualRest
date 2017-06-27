@@ -2,6 +2,7 @@
 {
   public class JsonRestClientOptions
   {
+    public AuthenticationInfo AuthenticationInfo { get;set; }
     public NonHttpSuccessCodes NonHttpSuccessCodeHandling { get; set; } = NonHttpSuccessCodes.Continue;
     public NullValues NullValueHandling { get; set; } = NullValues.Ignore;
     public PropertyStyle PropertyStyle { get; set; } = PropertyStyle.Unmodified;

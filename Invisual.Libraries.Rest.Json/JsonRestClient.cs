@@ -27,9 +27,12 @@ namespace InvisualRest
       _baseUri = new Uri(baseUri);
 
       RequestHeaders = new Dictionary<string, string>();
+
+      if (_options.AuthenticationInfo != null)
+        RequestHeaders.Add("Authorization", options.AuthenticationInfo.ToString());
     }
 
-    protected Dictionary<string, string> RequestHeaders { get; }
+    public Dictionary<string, string> RequestHeaders { get; }
 
     public async Task<T> GetAsync<T>(string resource)
     {
