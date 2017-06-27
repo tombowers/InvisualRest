@@ -36,19 +36,19 @@ namespace InvisualRest
       return await RequestAsync<T>(resource, HttpMethod.Get).ConfigureAwait(false);
     }
 
-    public async Task<T> PostAsync<T>(string resource, RestRequest<T> request)
+    public async Task<T> PostAsync<T>(string resource, object request)
     {
-      return await RequestAsync(resource, HttpMethod.Post, request).ConfigureAwait(false);
+      return await RequestAsync<T>(resource, HttpMethod.Post, request).ConfigureAwait(false);
     }
 
-    public async Task<T> PatchAsync<T>(string resource, RestRequest<T> request)
+    public async Task<T> PatchAsync<T>(string resource, object request)
     {
-      return await RequestAsync(resource, new HttpMethod("PATCH"), request).ConfigureAwait(false);
+      return await RequestAsync<T>(resource, new HttpMethod("PATCH"), request).ConfigureAwait(false);
     }
 
-    public async Task<T> PutAsync<T>(string resource, RestRequest<T> request)
+    public async Task<T> PutAsync<T>(string resource, object request)
     {
-      return await RequestAsync(resource, HttpMethod.Put, request).ConfigureAwait(false);
+      return await RequestAsync<T>(resource, HttpMethod.Put, request).ConfigureAwait(false);
     }
 
     public async Task<T> DeleteAsync<T>(string resource)
@@ -56,12 +56,12 @@ namespace InvisualRest
       return await RequestAsync<T>(resource, HttpMethod.Delete).ConfigureAwait(false);
     }
 
-    protected virtual async Task<T> RequestAsync<T>(string resource, HttpMethod httpMethod, RestRequest<T> request = null)
+    protected virtual async Task<T> RequestAsync<T>(string resource, HttpMethod httpMethod, object request = null)
     {
-      return await RequestAfterDelayAsync(0, resource, httpMethod, request).ConfigureAwait(false);
+      return await RequestAfterDelayAsync<T>(0, resource, httpMethod, request).ConfigureAwait(false);
     }
 
-    private async Task<T> RequestAfterDelayAsync<T>(int requestIndex, string resource, HttpMethod httpMethod, RestRequest<T> request = null)
+    private async Task<T> RequestAfterDelayAsync<T>(int requestIndex, string resource, HttpMethod httpMethod, object request = null)
     {
       await Task.Delay(CalculateNextRetryDelay(requestIndex)).ConfigureAwait(false);
 
@@ -120,7 +120,7 @@ namespace InvisualRest
             && requestIndex < _options.RetryPolicy.MaxRetries
             )
           {
-            return await RequestAfterDelayAsync(requestIndex + 1, resource, httpMethod, request).ConfigureAwait(false);
+            return await RequestAfterDelayAsync<T>(requestIndex + 1, resource, httpMethod, request).ConfigureAwait(false);
           }
 
           throw new RestException("Exception thrown by HttpClient. See inner exception for details.", e);
@@ -132,7 +132,7 @@ namespace InvisualRest
           && _options.RetryPolicy.HttpStatuses.Contains((int)response.StatusCode)
           )
         {
-          return await RequestAfterDelayAsync(requestIndex + 1, resource, httpMethod, request).ConfigureAwait(false);
+          return await RequestAfterDelayAsync<T>(requestIndex + 1, resource, httpMethod, request).ConfigureAwait(false);
         }
 
         var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
