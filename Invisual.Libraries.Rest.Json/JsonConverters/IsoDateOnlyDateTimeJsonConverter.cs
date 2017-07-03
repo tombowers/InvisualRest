@@ -3,12 +3,18 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Globalization;
 
-namespace InvisualRestConverters
+namespace InvisualRest.JsonConverters
 {
+  /// <summary>
+  /// JsonConverter for ISO dates.
+  /// </summary>
   public class IsoDateOnlyDateTimeJsonConverter : DateTimeConverterBase
   {
     private const string Format = "yyyy-MM-dd";
 
+    /// <summary>
+    /// Overriden to read ISO dates.
+    /// </summary>
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
       if (reader.Value == null)
@@ -26,6 +32,9 @@ namespace InvisualRestConverters
       return DateTime.Now;
     }
 
+    /// <summary>
+    /// Overriden to write ISO dates.
+    /// </summary>
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
       writer.WriteValue(((DateTime)value).ToString(Format));

@@ -3,17 +3,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace InvisualRest
 {
+  /// <summary>
+  /// Client for connecting to resources over HTTP.
+  /// </summary>
   public class JsonRestClient
   {
     private readonly Uri _baseUri;
     private readonly JsonRestClientOptions _options;
 
+    /// <summary>
+    /// Creates an instance of <see cref="JsonRestClient"/>.
+    /// </summary>
+    /// <param name="baseUri">The root uri of the API.</param>
+    /// <param name="options">Optional configuration options for the client.</param>
     public JsonRestClient(string baseUri, JsonRestClientOptions options = null)
     {
       if (string.IsNullOrWhiteSpace(baseUri)) throw new ArgumentNullException(nameof(baseUri));
@@ -32,33 +41,93 @@ namespace InvisualRest
         RequestHeaders.Add("Authorization", options.AuthenticationInfo.ToString());
     }
 
+    /// <summary>
+    /// Gets the request headers. Use this collection for custom control of the headers prior to requests.
+    /// </summary>
     public Dictionary<string, string> RequestHeaders { get; }
 
+    /// <summary>
+    /// Performs a GET request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> GetAsync<T>(string resource)
     {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
       return await RequestAsync<T>(resource, HttpMethod.Get).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Performs a POST request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <param name="request">An object representing the request.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> PostAsync<T>(string resource, object request)
     {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
       return await RequestAsync<T>(resource, HttpMethod.Post, request).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Performs a PATCH request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <param name="request">An object representing the request.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> PatchAsync<T>(string resource, object request)
     {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
       return await RequestAsync<T>(resource, new HttpMethod("PATCH"), request).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Performs a PUT request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <param name="request">An object representing the request.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> PutAsync<T>(string resource, object request)
     {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
       return await RequestAsync<T>(resource, HttpMethod.Put, request).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Performs a DELETE request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> DeleteAsync<T>(string resource)
     {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
       return await RequestAsync<T>(resource, HttpMethod.Delete).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Performs an HTTP request.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="resource">The resource type.</param>
+    /// <param name="httpMethod">The request method.</param>
+    /// <param name="request">An object representing the request.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     protected virtual async Task<T> RequestAsync<T>(string resource, HttpMethod httpMethod, object request = null)
     {
       return await RequestAfterDelayAsync<T>(0, resource, httpMethod, request).ConfigureAwait(false);
@@ -66,7 +135,7 @@ namespace InvisualRest
 
     private async Task<T> RequestAfterDelayAsync<T>(int requestIndex, string resource, HttpMethod httpMethod, object request = null)
     {
-      await Task.Delay(CalculateNextRetryDelay(requestIndex)).ConfigureAwait(false);
+      await Task.Delay(CalculateRequestDelay(requestIndex)).ConfigureAwait(false);
 
       // Ensure resource doesn't start with a slash, which will make the HttpClient perform the request relative the the uri root rather than the full base address.
       if (resource.StartsWith("/"))
@@ -113,24 +182,28 @@ namespace InvisualRest
               throw new RestException("Unsupported HTTP Method specified");
           }
 
-          if (_options.NonHttpSuccessCodeHandling == NonHttpSuccessCodes.ThrowException)
-            response.EnsureSuccessStatusCode();
+          if (_options.NonHttpSuccessCodeHandling == NonHttpSuccessCodes.ThrowException && !response.IsSuccessStatusCode)
+          {
+            throw new RestException("Non-success status code. Check the HttpStatusCode property.")
+            {
+              HttpStatusCode = (int)response.StatusCode,
+              RawResponse = await response.Content.ReadAsStringAsync()
+            };
+          }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-          if (
-            (_options.RetryPolicy.WhenToRetry & RetryPolicy.Retry.OnAllExceptions) != 0
-            && requestIndex < _options.RetryPolicy.MaxRetries
-            )
+          if (_options.RetryPolicy != null && _options.RetryPolicy.OnException && requestIndex < _options.RetryPolicy.MaxRetries)
           {
             return await RequestAfterDelayAsync<T>(requestIndex + 1, resource, httpMethod, request).ConfigureAwait(false);
           }
 
-          throw new RestException("Exception thrown by HttpClient. See inner exception for details.", e);
+          throw;
         }
 
         if (
-          (_options.RetryPolicy.WhenToRetry & RetryPolicy.Retry.OnSpecificResponseStatuses) != 0
+          _options.RetryPolicy != null
+          && _options.RetryPolicy.HttpStatuses.Any()
           && requestIndex < _options.RetryPolicy.MaxRetries
           && _options.RetryPolicy.HttpStatuses.Contains((int)response.StatusCode)
           )
@@ -151,8 +224,11 @@ namespace InvisualRest
       }
     }
 
-    private int CalculateNextRetryDelay(int numPreviousAttempts)
+    private int CalculateRequestDelay(int numPreviousAttempts)
     {
+      if (_options.RetryPolicy == null)
+        return 0;
+
       switch (_options.RetryPolicy.DelayInterval)
       {
         case RetryPolicy.RetryDelayInterval.SetInterval:
@@ -161,7 +237,6 @@ namespace InvisualRest
         case RetryPolicy.RetryDelayInterval.ExponentialBackoff:
           return ((1 << numPreviousAttempts) - 1) / 2 * 1000;
 
-        case RetryPolicy.RetryDelayInterval.None:
         default:
           return 0;
       }

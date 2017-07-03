@@ -13,6 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invisual.Libraries.Rest.Json", "Invisual.Libraries.Rest.Json\Invisual.Libraries.Rest.Json.csproj", "{7F19F958-E011-4AF2-A75F-77921EB72C34}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentationAssets", "DocumentationAssets", "{25AAD466-C39F-4D47-8CAB-70E3400B6B72}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Users\Tom\Desktop\default-entity.png = ..\..\Users\Tom\Desktop\default-entity.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{25AAD466-C39F-4D47-8CAB-70E3400B6B72} = {C0760296-2D90-4B6D-831A-3B5B4ABD9E9E}
 	EndGlobalSection
 EndGlobal

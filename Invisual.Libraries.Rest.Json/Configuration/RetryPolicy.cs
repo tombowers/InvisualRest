@@ -1,41 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace InvisualRest.Configuration
 {
+  /// <summary>
+  /// Provides options for configuration of request retry logic.
+  /// </summary>
   public class RetryPolicy
   {
     /// <summary>
-    /// Maximum number of times to retry failed requests
+    /// The maximum number of times to retry failed requests.
     /// </summary>
     public int MaxRetries { get; set; } = 10;
 
+    /// <summary>
+    /// The time to wait between request retries. This setting is only used when the DelayInterval is set to 'SetInterval'.
+    /// </summary>
     public int SetDelayMilliseconds { get; set; }
+
+    /// <summary>
+    /// The type of interval to use between request retries.
+    /// </summary>
     public RetryDelayInterval DelayInterval { get; set; }
 
     /// <summary>
-    /// A set of flags used to indicate what constitues a request which needs retrying
-    /// </summary>
-    public Retry WhenToRetry { get; set; }
-
-    /// <summary>
-    /// If the WhenToRetry property contains the OnSpecificResponseStatuses flag, this collection must specify those statuses.
+    /// A collection of HTTP status codes given to indicate a failed request.
     /// </summary>
     public List<int> HttpStatuses { get; set; } = new List<int>();
 
-    [Flags]
-    public enum Retry
-    {
-      Never = 0,
-      OnAllExceptions = 1,
-      OnSpecificResponseStatuses = 2
-    }
+    /// <summary>
+    /// Retry on all exceptions.
+    /// </summary>
+    public bool OnException { get; set; }
 
+    /// <summary>
+    /// Options for the type of interval to use between requests.
+    /// </summary>
     public enum RetryDelayInterval
     {
-      None = 0,
-      SetInterval = 1,
-      ExponentialBackoff = 2
+      /// <summary>
+      /// A fixed time interval between requests.
+      /// </summary>
+      SetInterval = 0,
+
+      /// <summary>
+      /// The time between retries gets progressively and exponentially longer.
+      /// </summary>
+      ExponentialBackoff = 1
     }
   }
 }
