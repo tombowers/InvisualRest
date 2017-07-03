@@ -233,9 +233,9 @@ public class Post : Response
 As seen above with the retry logic, you can pass a `JsonRestClientOptions` object into the `JsonRestClient` constructor. Here are all available options.
 
 | Property | Type | Default Value | Available Values | Notes |
-| --- | --- | --- | --- |
-| AuthenticationInfo  | AuthenticationInfo  | null | - | To provide credentials for Basic HTTP Authentication. See [Basic HTTP Authentication] |
-| NonHttpSuccessCodeHandling  | enum [NonHttpSuccessCodes]  | Continue | Continue, ThrowException | Choose to throw an exception when a non-200 HTTP status code is received. See [Status Code Handling]. |
-| NullValueHandling | enum [NullValues] | Include | Include, Ignore | Choose whether or not to include properties with null values in the serialised request, or omit them altogether. |
-| PropertyStyle | enum [PropertyStyle] | Unmodified | Unmodified, CamelCase | Serialise/Deserialise property names as-is, or convert to/from camel case. Property-level Json.NET attributes will be respected. |
-| RetryPolicy | RetryPolicy | null | - | See [Retry Logic] |
+| --- | --- | --- | --- | --- |
+| AuthenticationInfo  | AuthenticationInfo  | null | - | To provide credentials for Basic HTTP Authentication. See [Basic HTTP Authentication](#basic-http-authentication) |
+| NonHttpSuccessCodeHandling  | enum (NonHttpSuccessCodes)  | Continue | Continue, ThrowException | Choose to throw an exception when a non-200 HTTP status code is received. See [Status Code Handling](#status-code-handling). |
+| NullValueHandling | enum (NullValues) | Include | Include, Ignore | Choose whether or not to include properties with null values in the serialised request, or omit them altogether. |
+| PropertyStyle | enum (PropertyStyle) | Unmodified | Unmodified, CamelCase | Serialise/Deserialise property names as-is, or convert to/from camel case. Property-level Json.NET attributes will be respected. |
+| RetryPolicy | RetryPolicy | null | - | See [Retry Logic](#retry-logic) |
