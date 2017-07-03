@@ -1,22 +1,22 @@
 # InvisualRest
 Make rest requests with strongly typed requests and responses. Includes preset and configurable retry policies.
 
-* [Features]
-* [Installation]
-* [Examples]
-  * [Simple GET]
-  * [Simple GET - Resource List]
-  * [Simple POST]
-* [Basic HTTP Authentication]
-* [Custom Headers]
-* [Retry Logic]
-  * [Retry every 1 second]
-  * [Exponential Backoff]
-  * [Limit Number of Attempts]
-  * [Retry on Specified HTTP Status codes]
-  * [Retry On Exceptions]
-* [Status Code Handling]
-* [All Configuration Options]
+* [Features](features)
+* [Installation](installation)
+* [Examples](examples)
+  * [Simple GET](simple-get)
+  * [Simple GET - Resource List](simple-get---resource-list)
+  * [Simple POST](simple-post)
+* [Basic HTTP Authentication](basic-http-authentication)
+* [Custom Headers](custom-headers)
+* [Retry Logic](retry-logic)
+  * [Retry every 1 second](retry-every-1-second)
+  * [Exponential Backoff](exponential-backoff)
+  * [Limit Number of Attempts](limit-number-of-attempts)
+  * [Retry on Specified HTTP Status codes](retry-on-specified-http-status-codes)
+  * [Retry On Exceptions](retry-on-exceptions)
+* [Status Code Handling](status-code-handling)
+* [All Configuration Options](all-configuration-options)
 
 ## Features
 * Supports GET, POST, PATCH, PUT, DELETE
