@@ -1,5 +1,6 @@
 # InvisualRest
 ![NuGet](https://img.shields.io/nuget/v/Invisual.Libraries.Rest.Json.svg)
+![License](https://img.shields.io/github/license/tombowers/InvisualRest.svg)
 
 Make rest requests with strongly typed requests and responses. Includes preset and configurable retry policies.
 
