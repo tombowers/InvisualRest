@@ -1,4 +1,6 @@
 # InvisualRest
+![NuGet](https://img.shields.io/nuget/v/Invisual.Libraries.Rest.Json.svg)
+
 Make rest requests with strongly typed requests and responses. Includes preset and configurable retry policies.
 
 * [Features](#features)

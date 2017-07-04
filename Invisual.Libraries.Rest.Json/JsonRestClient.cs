@@ -65,7 +65,7 @@ namespace InvisualRest
     /// </summary>
     /// <typeparam name="T">The resource type.</typeparam>
     /// <param name="resource">The relative resource path.</param>
-    /// <param name="request">An object representing the request. This will be searialised and added to the querystring.</param>
+    /// <param name="request">An object representing the request. This will be serialised and added to the querystring.</param>
     /// <returns>An instance of T, deserialised from the API response.</returns>
     /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
     public async Task<T> GetAsync<T>(string resource, object request)
