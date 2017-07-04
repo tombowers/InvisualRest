@@ -61,6 +61,26 @@ namespace InvisualRest
     }
 
     /// <summary>
+    /// Performs a GET request.
+    /// </summary>
+    /// <typeparam name="T">The resource type.</typeparam>
+    /// <param name="resource">The relative resource path.</param>
+    /// <param name="request">An object representing the request. This will be searialised and added to the querystring.</param>
+    /// <returns>An instance of T, deserialised from the API response.</returns>
+    /// <exception cref="ArgumentNullException"></exception><exception cref="RestException"></exception><exception cref="HttpRequestException"></exception>
+    public async Task<T> GetAsync<T>(string resource, object request)
+    {
+      if (resource == null) throw new ArgumentNullException(nameof(resource));
+
+      var querystring = await request.ToQueryStringAsync(GetJsonSerializerSettings());
+
+      if (!string.IsNullOrWhiteSpace(querystring))
+        resource += "?" + querystring;
+
+      return await RequestAsync<T>(resource, HttpMethod.Get).ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// Performs a POST request.
     /// </summary>
     /// <typeparam name="T">The resource type.</typeparam>

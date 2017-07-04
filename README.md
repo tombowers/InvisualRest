@@ -6,6 +6,7 @@ Make rest requests with strongly typed requests and responses. Includes preset a
 * [Examples](#examples)
   * [Simple GET](#simple-get)
   * [Simple GET - Resource List](#simple-get---resource-list)
+  * [GET with strongly typed request](#get-with-strongly-typed-request)
   * [Simple POST](#simple-post)
 * [Basic HTTP Authentication](#basic-http-authentication)
 * [Custom Headers](#custom-headers)
@@ -66,6 +67,32 @@ public class Post
     public string Title { get; set; }
     public string Body { get; set; }
 }
+```
+#### GET with strongly typed request
+Pass an object to a call to `GetAsync()` to have it automatically serialised and added as a querystring.
+Parameters will obey any serialisation options, such as `PropertyStyle.CamelCase`, or `NullValues.Ignore`, as well as Json.NET property annotations.
+```C#
+var client = new JsonRestClient(
+    "https://jsonplaceholder.typicode.com",
+    new JsonRestClientOptions
+    {
+        NullValueHandling = NullValues.Ignore,
+        PropertyStyle = PropertyStyle.CamelCase,
+    });
+
+List<Post> post = await client.GetAsync<List<Post>>("posts", new PostRequest { UserId = "1", Id = 1 });
+
+// -> https://jsonplaceholder.typicode.com/posts?userId=1&id=1
+
+public class PostRequest
+{
+    public string Title { get; set; }
+    public string UserId { get; set; }
+
+    [JsonProperty("id")]
+    public int? Id { get; set; }
+}
+
 ```
 
 #### Simple POST
