@@ -247,7 +247,7 @@ public abstract class Response
     public string ErrorCode { get; set; }
     public string ErrorMessage { get; set; }
 
-    public bool HasError => return ErrorCode != null;
+    public bool HasError => ErrorCode != null;
 }
 
 public class Post : Response
