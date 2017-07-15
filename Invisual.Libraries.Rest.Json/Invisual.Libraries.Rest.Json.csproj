@@ -44,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Invisual.Libraries.Rest.Json.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,7 +72,7 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>7.0.1</Version>
     </PackageReference>
-	<PackageReference Include="NuGet.Build.Tasks.Pack">
+    <PackageReference Include="NuGet.Build.Tasks.Pack">
       <Version>4.0.0</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
