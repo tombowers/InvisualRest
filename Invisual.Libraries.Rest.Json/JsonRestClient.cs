@@ -207,7 +207,7 @@ namespace InvisualRest
             throw new RestException("Non-success status code. Check the HttpStatusCode property.")
             {
               HttpStatusCode = (int)response.StatusCode,
-              RawResponse = await response.Content.ReadAsStringAsync()
+              RawResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false)
             };
           }
         }
@@ -239,7 +239,11 @@ namespace InvisualRest
         }
         catch (Exception e)
         {
-          throw new RestException("Exception thrown during deserialization. See inner exception.", e);
+          throw new RestException("Exception thrown during deserialization. See inner exception.", e)
+          {
+            HttpStatusCode = (int)response.StatusCode,
+            RawResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false)
+          };
         }
       }
     }
